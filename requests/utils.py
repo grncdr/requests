@@ -370,12 +370,12 @@ def stream_decode_gzip(iterator):
         pass
 
 
-def requote_path(path):
+def requote_path(path, safe=""):
     """Re-quote the given URL path component.
 
     This function passes the given path through an unquote/quote cycle to
     ensure that it is fully and consistenty quoted.
     """
     parts = path.split("/")
-    parts = (urllib.quote(urllib.unquote(part), safe="") for part in parts)
+    parts = (urllib.quote(urllib.unquote(part), safe=safe) for part in parts)
     return "/".join(parts)
