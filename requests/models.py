@@ -54,6 +54,7 @@ class Request(object):
         proxies=None,
         hooks=None,
         config=None,
+        safe="",
         _poolmanager=None):
 
         #: Float describes the timeout of the request.
@@ -106,6 +107,9 @@ class Request(object):
 
         #: Dictionary of configurations for this request.
         self.config = dict(config or [])
+        
+        #: Set of characters to avoid quoting in URL path (see :func:`urllib.quote`)
+        self.safe = safe
 
         #: True if Request has been sent.
         self.sent = False
@@ -294,7 +298,7 @@ class Request(object):
         if isinstance(path, unicode):
             path = path.encode('utf-8')
 
-        path = requote_path(path)
+        path = requote_path(path, self.safe)
 
         url = str(urlunparse([ scheme, netloc, path, params, query, fragment ]))
 
